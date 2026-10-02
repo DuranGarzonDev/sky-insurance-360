@@ -2,6 +2,9 @@
 
 Sitio estático con HTML, CSS y JavaScript Vanilla. Funciona al abrir `index.html` sin backend, CDN ni servicios externos durante la navegación. La única salida externa es el enlace de WhatsApp cuando el visitante envía el formulario de cotización.
 
+- Web publicada: https://durangarzondev.github.io/sky-insurance-360/
+- Repositorio: https://github.com/DuranGarzonDev/sky-insurance-360
+
 ## Ejecutar
 
 Desde PowerShell:
@@ -74,3 +77,5 @@ Seleccionar **Hogar** desde el croquis o el menú inicia directamente el video d
 Los botones **Volver**, **Infraestructura** y la tecla `Esc` reproducen las transiciones inversas correspondientes. Los paneles laterales se convierten en controles desplegables en móvil para conservar visible el panorama y sus zonas pulsables.
 
 La interfaz fue contrastada con los cinco archivos de `PANORAMAS FINALES`; esos archivos sirven como referencia visual. La web compone la interfaz con HTML y CSS sobre los panoramas de `PANORAMAS LIMPIOS`, de modo que campos, botones, estados y cotizaciones permanecen interactivos.
+
+Los iconos de navegación son SVG locales con un lenguaje visual lineal inspirado en Lucide. En pantallas amplias, Hogar usa paneles laterales para liberar el centro del panorama. En portátiles de poca altura, tabletas y móviles, esos paneles se convierten en cajones que se abren bajo demanda.
