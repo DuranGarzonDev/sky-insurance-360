@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#061b39">
+  <title>Mundo Sky Insurance 360°</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body class="is-loading">
+  <svg class="svg-sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-house" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/></symbol>
+      <symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h8v18"/><path d="M14 9h4a2 2 0 0 1 2 2v10"/><path d="M8 7h2M8 11h2M8 15h2M17 13h1M17 17h1M3 21h18"/></symbol>
+      <symbol id="i-hard-hat" viewBox="0 0 24 24"><path d="M2 18h20M4 18v-2a8 8 0 0 1 16 0v2M9 8v4M15 8v4M12 6v6"/></symbol>
+      <symbol id="i-car" viewBox="0 0 24 24"><path d="m5 17-2-1v-4l2-5h14l2 5v4l-2 1M5 12h14M7 17v2M17 17v2"/><circle cx="7" cy="15" r="1"/><circle cx="17" cy="15" r="1"/></symbol>
+      <symbol id="i-truck" viewBox="0 0 24 24"><path d="M3 6h11v11H3zM14 10h4l3 3v4h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 20 6v6c0 5-3.4 8-8 10-4.6-2-8-5-8-10V6z"/><path d="m9 12 2 2 4-5"/></symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 5.7a5.5 5.5 0 0 0-7.8 0L12 6.8l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 22l8.8-8.5a5.5 5.5 0 0 0 0-7.8Z"/><path d="M3.7 12h4l1.5-3 2.5 6 1.5-3h7"/></symbol>
+      <symbol id="i-sofa" viewBox="0 0 24 24"><path d="M5 12V7a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v5"/><path d="M4 11a2 2 0 0 0-2 2v5h20v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-2-2ZM4 18v2M20 18v2"/></symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></symbol>
+      <symbol id="i-headset" viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2M4 14H2v5h4v-7M20 14h2v5h-4v-7M18 21h-4"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+      <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4zM15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+      <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+      <symbol id="i-move" viewBox="0 0 24 24"><path d="m8 6 4-4 4 4M12 2v20M8 18l4 4 4-4M6 8l-4 4 4 4M2 12h20M18 8l4 4-4 4"/></symbol>
+      <symbol id="i-pointer" viewBox="0 0 24 24"><path d="m4 4 7.5 17 2.1-7.4L21 11.5z"/></symbol>
+    </defs>
+  </svg>
+  <div class="loading-screen" id="loading-screen" role="status" aria-live="polite">
+    <div class="loading-content">
+      <img class="loading-logo" src="assets/sky-logo.svg" alt="Sky Insurance">
+      <div class="loading-track" aria-hidden="true"><span id="loading-progress"></span></div>
+      <p id="loading-message">Preparando tu experiencia 360°</p>
+      <button class="ghost-button" id="loading-retry" type="button" hidden>Reintentar</button>
+    </div>
+  </div>
+
+  <section class="intro-film" id="intro-film" aria-label="Presentación del Mundo Sky" hidden>
+    <video id="intro-video" preload="auto" muted playsinline aria-label="La ciudad Sky toma forma">
+      <source src="assets/intro-city.mp4" type="video/mp4">
+    </video>
+    <div class="film-vignette" aria-hidden="true"></div>
+    <button class="skip-film" id="skip-film" type="button">Saltar introducción <span aria-hidden="true">→</span></button>
+    <button class="play-film" id="play-film" type="button" hidden>Iniciar experiencia <span aria-hidden="true">▶</span></button>
+  </section>
+
+  <header class="world-header" id="world-header" inert>
+    <a class="brand" href="#inicio" id="home-link" aria-label="Sky Insurance, volver a la ciudad"><img src="assets/sky-logo.svg" alt="Sky Insurance"></a>
+    <div class="world-title"><strong>MUNDO SKY INSURANCE 360°</strong><span>Elige una zona para comenzar</span></div>
+    <div class="header-actions">
+      <button type="button" id="open-guide" aria-label="Cómo explorar"><svg class="ui-icon" aria-hidden="true"><use href="#i-info"/></svg></button>
+      <button type="button" class="is-muted" id="sound-toggle" aria-label="Activar sonidos" aria-pressed="false"><svg class="ui-icon" aria-hidden="true"><use href="#i-volume"/></svg></button>
+      <button type="button" id="menu-toggle" aria-label="Abrir menú de mundos" aria-expanded="false"><svg class="ui-icon" aria-hidden="true"><use href="#i-menu"/></svg></button>
+    </div>
+  </header>
+
+  <main id="app-main" inert>
+    <section class="view view-city" id="city-view" aria-label="Ciudad maestra Sky">
+      <h1 class="sr-only">Mundo Sky Insurance 360°</h1>
+      <div class="viewport" id="city-viewport" role="region" tabindex="0" aria-label="Arrastra o usa las flechas para explorar la ciudad">
+        <div class="scene" id="city-scene">
+          <svg id="city-svg" viewBox="0 0 1600 800" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Panorámica interactiva de la ciudad Sky">
+            <image href="assets/city-master.webp" width="1600" height="800" preserveAspectRatio="none"/>
+            <g id="hotspots">
+              <g id="hotspot-empresa" class="hotspot-control" data-zone="empresa" tabindex="0" role="button" aria-label="Seleccionar mundo Empresarial" style="--reveal:0">
+                <path class="hotspot-shape" d="M649 342 L708 317 L828 326 L876 353 L876 461 L648 461 Z"/>
+                <g class="hotspot-pin" transform="translate(760 295)"><line y1="19" y2="55"/><circle cy="62" r="9"/><rect x="-54" y="-18" width="108" height="35" rx="10"/><text y="5">Empresarial</text></g>
+              </g>
+              <g id="hotspot-hogar" class="hotspot-control" data-zone="hogar" tabindex="0" role="button" aria-label="Seleccionar mundo Hogar" style="--reveal:1">
+                <path class="hotspot-shape" d="M485 385 L506 364 L529 379 L543 362 L570 379 L585 366 L620 389 L625 455 L483 455 Z"/>
+                <g class="hotspot-pin" transform="translate(552 342)"><line y1="19" y2="49"/><circle cy="56" r="9"/><rect x="-42" y="-18" width="84" height="35" rx="10"/><text y="5">Hogar</text></g>
+              </g>
+              <g id="hotspot-construccion" class="hotspot-control" data-zone="construccion" tabindex="0" role="button" aria-label="Seleccionar mundo Construcción" style="--reveal:2">
+                <path class="hotspot-shape" d="M197 342 L229 318 L309 325 L348 359 L344 463 L207 468 Z"/>
+                <g class="hotspot-pin" transform="translate(280 300)"><line y1="19" y2="48"/><circle cy="55" r="9"/><rect x="0" y="-18" width="116" height="35" rx="10"/><text x="58" y="5">Construcción</text></g>
+              </g>
+              <g id="hotspot-vehiculos" class="hotspot-control" data-zone="vehiculos" tabindex="0" role="button" aria-label="Seleccionar mundo Vehículos" style="--reveal:3">
+                <path class="hotspot-shape" d="M141 452 L357 452 L397 520 L332 586 L168 571 L130 505 Z"/>
+                <g class="hotspot-pin" transform="translate(244 500)"><line y1="19" y2="41"/><circle cy="48" r="9"/><rect x="-52" y="-18" width="104" height="35" rx="10"/><text y="5">Vehículos</text></g>
+              </g>
+              <g id="hotspot-transporte" class="hotspot-control" data-zone="transporte" tabindex="0" role="button" aria-label="Seleccionar mundo Transporte" style="--reveal:4">
+                <path class="hotspot-shape" d="M374 422 L526 426 L538 512 L401 519 L368 480 Z"/>
+                <g class="hotspot-pin" transform="translate(456 390)"><line y1="19" y2="46"/><circle cy="53" r="9"/><rect x="-53" y="-18" width="106" height="35" rx="10"/><text y="5">Transporte</text></g>
+              </g>
+              <g id="hotspot-responsabilidad" class="hotspot-control" data-zone="responsabilidad" tabindex="0" role="button" aria-label="Seleccionar Responsabilidad civil" style="--reveal:5">
+                <path class="hotspot-shape" d="M120 534 C151 510 197 520 218 561 L204 625 L139 632 L108 581 Z"/>
+                <path class="hotspot-shape" d="M1362 570 C1396 545 1440 558 1461 607 L1443 665 L1380 659 L1349 613 Z"/>
+                <path class="hotspot-shape" d="M1100 466 C1125 451 1164 461 1180 493 L1171 548 L1114 548 L1090 510 Z"/>
+                <g class="hotspot-pin" transform="translate(1140 424)"><line y1="19" y2="35"/><circle cy="42" r="9"/><rect x="-76" y="-18" width="152" height="35" rx="10"/><text y="5">Responsabilidad civil</text></g>
+              </g>
+              <g id="hotspot-vida" class="hotspot-control" data-zone="vida" tabindex="0" role="button" aria-label="Seleccionar Vida y Salud" style="--reveal:6">
+                <path class="hotspot-shape" d="M1332 356 L1534 352 L1539 507 L1328 509 Z"/>
+                <g class="hotspot-pin" transform="translate(1433 365)"><line y1="19" y2="54"/><circle cy="61" r="9"/><rect x="-60" y="-18" width="120" height="35" rx="10"/><text y="5">Vida y Salud</text></g>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <aside class="world-menu glass-panel" id="world-menu" aria-label="Explora nuestros mundos">
+        <div class="menu-heading"><span>Explora nuestros mundos</span><button type="button" id="close-world-menu" aria-label="Cerrar menú">×</button></div>
+        <div class="world-menu-list">
+          <button type="button" data-zone="empresa"><span><svg class="ui-icon"><use href="#i-building"/></svg></span> Empresarial</button>
+          <button type="button" data-zone="hogar"><span><svg class="ui-icon"><use href="#i-house"/></svg></span> Hogar</button>
+          <button type="button" data-zone="construccion"><span><svg class="ui-icon"><use href="#i-hard-hat"/></svg></span> Construcción</button>
+          <button type="button" data-zone="vehiculos"><span><svg class="ui-icon"><use href="#i-car"/></svg></span> Vehículos</button>
+          <button type="button" data-zone="transporte"><span><svg class="ui-icon"><use href="#i-truck"/></svg></span> Transporte</button>
+          <button type="button" data-zone="responsabilidad"><span><svg class="ui-icon"><use href="#i-shield"/></svg></span> Responsabilidad civil</button>
+          <button type="button" data-zone="vida"><span><svg class="ui-icon"><use href="#i-heart"/></svg></span> Vida y Salud</button>
+        </div>
+      </aside>
+
+      <aside class="zone-panel glass-panel" id="zone-panel" aria-live="polite">
+        <div class="zone-panel-title"><span class="zone-icon" id="zone-icon"><svg class="ui-icon"><use href="#i-shield"/></svg></span><strong id="zone-title">RESPONSABILIDAD CIVIL</strong><button type="button" id="close-zone-panel" aria-label="Cerrar información">×</button></div>
+        <ul id="zone-benefits"></ul>
+        <button class="zone-action" id="zone-action" type="button">Conocer coberturas <span aria-hidden="true">→</span></button>
+      </aside>
+
+      <div class="scene-actions" aria-label="Controles de la panorámica"><button type="button" id="zoom-out" aria-label="Alejar">−</button><button type="button" id="zoom-reset" aria-label="Centrar panorámica"><svg class="ui-icon"><use href="#i-target"/></svg></button><button type="button" id="zoom-in" aria-label="Acercar">+</button></div>
+      <div class="discovery-cue" id="discovery-cue" aria-hidden="true"><span class="drag-hand">↔</span><strong>Arrastra para explorar</strong></div>
+    </section>
+
+    <section class="view view-company" id="company-view" aria-label="Recorrido Empresarial" hidden>
+      <div class="viewport company-viewport" id="company-viewport" role="region" tabindex="0" aria-label="Recepción Sky; arrastra para explorar">
+        <div class="company-stage" id="company-stage">
+          <div class="company-frame" data-frame="0"><img src="assets/city-master.webp" alt=""></div>
+          <div class="company-frame" data-frame="1"><img data-src="assets/company/approach.webp" alt=""></div>
+          <div class="company-frame" data-frame="2"><img data-src="assets/company/crosswalk.webp" alt=""></div>
+          <div class="company-frame" data-frame="3"><img data-src="assets/company/front.webp" alt=""></div>
+          <div class="company-frame" data-frame="4"><img data-src="assets/company/entrance.webp" alt=""></div>
+          <div class="company-frame" data-frame="5"><img data-src="assets/company/lobby.webp" alt=""></div>
+          <div class="company-frame" data-frame="6"><img data-src="assets/company/selection.webp" alt=""></div>
+          <div class="company-frame" data-frame="7">
+            <img data-src="assets/company/services.webp" alt="">
+            <svg id="service-svg" viewBox="0 0 1600 800" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Servicios de la recepción Sky">
+              <rect id="service-autos" class="service-hotspot" data-route="vehiculos" x="485" y="245" width="118" height="163" rx="10" tabindex="0" role="button" aria-label="Explorar seguros de autos"/>
+              <rect id="service-hogar" class="service-hotspot" data-product="hogar" x="607" y="245" width="124" height="163" rx="10" tabindex="0" role="button" aria-label="Ver seguros para hogar"/>
+              <rect id="service-vida" class="service-hotspot" data-product="vida-salud" x="735" y="245" width="128" height="163" rx="10" tabindex="0" role="button" aria-label="Ver seguros de vida y salud"/>
+              <rect id="service-empresa" class="service-hotspot" data-product="empresa" x="869" y="245" width="127" height="163" rx="10" tabindex="0" role="button" aria-label="Ver seguros para empresas"/>
+              <rect id="service-proyectos" class="service-hotspot" data-product="construccion-transporte" x="1001" y="245" width="118" height="163" rx="10" tabindex="0" role="button" aria-label="Ver seguros de construcción y transporte"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="cinema-vignette" aria-hidden="true"></div><div class="cinema-speed" aria-hidden="true"></div>
+      <div class="journey-progress" aria-hidden="true"><span id="journey-progress-bar"></span></div>
+      <button class="route-back" id="company-back" type="button">← Volver a la ciudad</button>
+      <div class="scene-actions company-scene-actions" aria-label="Controles de la recepción"><button type="button" id="company-zoom-out" aria-label="Alejar recepción">−</button><button type="button" id="company-zoom-reset" aria-label="Centrar recepción"><svg class="ui-icon"><use href="#i-target"/></svg></button><button type="button" id="company-zoom-in" aria-label="Acercar recepción">+</button></div>
+      <div class="company-arrival" id="company-arrival" hidden><button type="button" data-product="empresa">Ver seguros para empresas <span aria-hidden="true">→</span></button></div>
+      <div class="travel-status" id="company-travel-status" role="status" hidden>Entrando a Sky Insurance…</div>
+    </section>
+
+    <section class="view view-home" id="home-view" aria-label="Mundo Hogar" hidden>
+      <video class="home-transition" id="home-transition" muted playsinline preload="metadata" aria-label="Recorrido hacia el mundo Hogar"></video>
+      <div class="home-scene" id="home-scene">
+        <img id="home-background" src="assets/home/facade.webp" alt="Fachada del mundo Hogar">
+        <div class="home-shade" aria-hidden="true"></div>
+
+        <header class="home-header">
+          <img src="assets/sky-logo.svg" alt="Sky Insurance">
+          <div class="home-progress" aria-label="Progreso de cotización"><span class="is-active" id="home-step-one">1</span><b id="home-step-label">Infraestructura</b><i></i><span id="home-step-two">2</span><b>Muebles y enseres</b><i></i><span>3</span><b>Resumen</b></div>
+          <div class="home-header-actions"><button type="button" id="home-protection" aria-label="Abrir mi protección"><svg class="ui-icon"><use href="#i-shield"/></svg><b>Mi protección</b><em id="home-protection-count">1</em></button><button type="button" id="home-help" aria-label="Información del mundo Hogar"><svg class="ui-icon"><use href="#i-info"/></svg></button></div>
+        </header>
+
+        <button class="route-back home-back" type="button" id="home-back">← Volver al Mundo Sky</button>
+
+        <div class="home-hotspots" id="home-hotspots" aria-label="Elementos asegurables del hogar">
+          <button style="--x:46%;--y:15%" data-home-item="techo"><span>1</span> Techo</button>
+          <button style="--x:39%;--y:41%" data-home-item="paredes"><span>2</span> Paredes</button>
+          <button style="--x:62%;--y:34%" data-home-item="ventanas"><span>3</span> Ventanas</button>
+          <button style="--x:54%;--y:56%" data-home-item="puertas"><span>4</span> Puertas</button>
+          <button style="--x:50%;--y:80%" data-home-item="pisos"><span>5</span> Pisos</button>
+        </div>
+
+        <aside class="home-config home-glass" id="home-config" aria-labelledby="home-config-title">
+          <div class="home-card-head"><span class="home-card-icon"><svg class="ui-icon"><use href="#i-house"/></svg></span><div><small id="home-config-kicker">PASO 1</small><h2 id="home-config-title">Infraestructura</h2></div><button type="button" class="home-mobile-close" data-close-home-config aria-label="Cerrar configuración">×</button></div>
+          <div id="home-structure-fields">
+            <span class="home-field-title">Tipo de vivienda</span>
+            <div class="property-type" role="group" aria-label="Tipo de vivienda"><button type="button" class="is-active"><svg class="ui-icon"><use href="#i-house"/></svg>Casa</button><button type="button"><svg class="ui-icon"><use href="#i-building"/></svg>Apartamento</button></div>
+            <label class="home-field">Dirección de la vivienda<span><svg class="ui-icon"><use href="#i-pin"/></svg><input id="home-address" type="text" value="Cra. 15 # 123-45, Bogotá D.C." autocomplete="street-address"></span></label>
+            <div class="home-map-preview" role="img" aria-label="Vista de referencia de la fachada"><small>Vista de fachada</small><strong>Ver ubicación</strong></div>
+            <label class="home-field">Valor de la vivienda en construcción<span>$ <input id="home-building-value" type="number" min="50000000" step="10000000" value="1200000000"></span><small>No incluye el valor del terreno.</small></label>
+            <div class="home-field-grid">
+              <label class="home-field">Área construida<span><input id="home-area" type="number" min="20" max="2000" value="250"> m²</span></label>
+              <label class="home-field">Número de pisos<select id="home-floors"><option>1</option><option selected>2</option><option>3</option><option>4 o más</option></select></label>
+              <label class="home-field">Año de construcción<select id="home-year"><option>Antes de 1990</option><option>1990–2010</option><option selected>2011 en adelante</option></select></label>
+              <label class="home-field">Zona<select id="home-zone"><option>Urbana</option><option>Rural</option></select></label>
+            </div>
+            <span class="home-field-title">Material de construcción</span>
+            <div class="home-choice-grid home-choice-compact"><label><input type="radio" name="material" checked> Concreto</label><label><input type="radio" name="material"> Mampostería</label><label><input type="radio" name="material"> Acero</label><label><input type="radio" name="material"> Otro</label></div>
+            <span class="home-field-title">Seguridad del inmueble</span>
+            <div class="home-choice-grid" id="home-coverages"><label><input type="checkbox" checked data-home-coverage="Alarma"> Alarma</label><label><input type="checkbox" checked data-home-coverage="CCTV"> CCTV</label><label><input type="checkbox" checked data-home-coverage="Vigilancia"> Vigilancia</label><label><input type="checkbox" data-home-coverage="Puerta de seguridad"> Puerta de seguridad</label></div>
+          </div>
+          <div id="home-contents-fields" hidden>
+            <p>Protege los bienes que hacen de tu casa un hogar.</p>
+            <label class="home-field">¿Cuál es el valor aproximado de tus muebles y enseres?<span>$ <input id="home-contents-value" type="number" min="5000000" step="5000000" value="80000000"></span><small>Incluye sala, comedor, camas, decoración y enseres en general.</small></label>
+            <div class="home-choice-grid"><label><input type="checkbox" checked> Muebles</label><label><input type="checkbox" checked> Electrodomésticos</label><label><input type="checkbox" checked> Tecnología</label><label><input type="checkbox"> Objetos especiales</label></div>
+          </div>
+          <button class="home-primary" id="home-continue" type="button">Confirmar y continuar <span aria-hidden="true">→</span></button>
+        </aside>
+
+        <aside class="home-summary home-glass" id="home-summary" aria-live="polite">
+          <div class="home-card-head"><span class="home-card-icon"><svg class="ui-icon"><use href="#i-shield"/></svg></span><div><small>MI PROTECCIÓN</small><h2 id="home-item-title">Infraestructura</h2></div><button type="button" class="home-mobile-close" data-close-home-summary aria-label="Cerrar protección">×</button></div>
+          <p id="home-item-description">Protege la estructura principal de tu vivienda frente a los eventos seleccionados.</p>
+          <div class="home-protection-lines"><div><span><svg class="ui-icon"><use href="#i-house"/></svg>Infraestructura</span><strong id="home-structure-value">$ 1.200.000.000</strong></div><div id="home-contents-line" hidden><span><svg class="ui-icon"><use href="#i-sofa"/></svg>Muebles y enseres</span><strong id="home-contents-summary">$ 80.000.000</strong></div></div>
+          <div class="home-value"><small>Valor total declarado</small><strong id="home-estimated-value">$ 1.200.000.000</strong></div>
+          <button class="home-primary" id="home-quote" type="button">Siguiente: Resumen <span aria-hidden="true">→</span></button>
+        </aside>
+
+        <div class="home-mobile-actions">
+          <button type="button" id="open-home-config">Configurar</button>
+          <button type="button" id="open-home-summary">Ver protección</button>
+        </div>
+
+        <div class="home-bottom-nav" aria-label="Navegación del mundo Hogar">
+          <button type="button" data-home-section="infraestructura" class="is-active"><svg class="ui-icon"><use href="#i-shield"/></svg><span><b>Protege tu hogar</b><small>Ante daños accidentales</small></span></button>
+          <button type="button" data-home-section="muebles"><svg class="ui-icon"><use href="#i-settings"/></svg><span><b>Coberturas a tu medida</b><small>Según tus condiciones</small></span></button>
+          <button type="button" id="home-assistance"><svg class="ui-icon"><use href="#i-headset"/></svg><span><b>Acompañamiento</b><small>Personalizado por Sky</small></span></button>
+        </div>
+      </div>
+
+      <div class="home-question" id="home-question" hidden>
+        <div class="home-question-card" role="dialog" aria-modal="true" aria-labelledby="home-question-title">
+          <span class="home-question-icon" aria-hidden="true"><svg class="ui-icon"><use href="#i-sofa"/></svg></span>
+          <small>PASO 2 DE 3</small>
+          <h2 id="home-question-title">¿Deseas asegurar tus muebles y enseres?</h2>
+          <p>Tu cotización de infraestructura se conservará y continuarás al panel de muebles y enseres sin perder la información registrada.</p>
+          <div><button type="button" id="home-no-furniture">No, solo infraestructura</button><button type="button" class="home-primary" id="home-yes-furniture">Sí, continuar →</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view view-vehicles" id="vehicles-view" aria-labelledby="vehicles-title" hidden>
+      <div class="vehicles-backdrop"></div>
+      <button class="route-back" type="button" id="back-to-city">← Volver a la ciudad</button>
+      <div class="vehicles-content">
+        <span class="section-kicker">EXPLORA TU CAMINO</span>
+        <h2 id="vehicles-title">¿Qué te mueve<span class="accent">?</span></h2>
+        <p>Elige tu vehículo y conoce las opciones de protección disponibles.</p>
+        <svg id="vehicles-svg" viewBox="0 0 1080 390" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Selecciona moto, carro o avión">
+          <defs><linearGradient id="cardGradient" x2="0" y2="1"><stop stop-color="#173e78"/><stop offset="1" stop-color="#092753"/></linearGradient></defs>
+          <g id="vehicle-moto" class="vehicle-option" data-product="moto" tabindex="0" role="button" aria-label="Seguro para moto"><rect x="5" y="5" width="330" height="365" rx="24" fill="url(#cardGradient)"/><circle cx="92" cy="212" r="43" class="icon-stroke"/><circle cx="247" cy="212" r="43" class="icon-stroke"/><path d="M92 212 L137 139 L198 209 L247 212 L222 163 L180 163 M137 139 L113 139 M187 139 L225 139" class="icon-stroke"/><text x="30" y="307" class="vehicle-name">Moto</text><text x="30" y="338" class="vehicle-caption">Protección para cada trayecto ↗</text></g>
+          <g id="vehicle-carro" class="vehicle-option" data-product="carro" tabindex="0" role="button" aria-label="Seguro para carro"><rect x="375" y="5" width="330" height="365" rx="24" fill="url(#cardGradient)"/><path d="M408 213 L419 170 L455 156 L480 119 L590 119 L629 159 L669 171 L679 213 L672 231 L415 231 Z" class="icon-stroke"/><circle cx="469" cy="230" r="25" class="icon-stroke"/><circle cx="613" cy="230" r="25" class="icon-stroke"/><path d="M482 156 L500 128 L583 128 L612 156 Z" class="icon-stroke"/><text x="400" y="307" class="vehicle-name">Carro</text><text x="400" y="338" class="vehicle-caption">Conduce con tranquilidad ↗</text></g>
+          <g id="vehicle-avion" class="vehicle-option" data-product="avion" tabindex="0" role="button" aria-label="Seguro para avión"><rect x="745" y="5" width="330" height="365" rx="24" fill="url(#cardGradient)"/><path d="M785 199 L869 181 L910 113 Q923 95 935 106 L939 176 L1037 190 Q1053 195 1047 207 L939 220 L935 282 Q922 294 910 279 L869 220 Z" class="icon-stroke"/><path d="M820 166 L826 199 L820 232" class="icon-stroke"/><text x="770" y="307" class="vehicle-name">Avión</text><text x="770" y="338" class="vehicle-caption">Vuela con respaldo ↗</text></g>
+        </svg>
+      </div>
+    </section>
+  </main>
+
+  <div class="world-footer" id="world-footer" inert>
+    <button class="advisor-button" id="advisor-button" type="button"><span aria-hidden="true">◉</span> Habla con un asesor</button>
+    <div class="gesture-help" aria-label="Controles de exploración"><span><svg class="ui-icon" aria-hidden="true"><use href="#i-move"/></svg> Arrastra para explorar</span><span><svg class="ui-icon" aria-hidden="true"><use href="#i-target"/></svg> Rueda para acercar</span><span><svg class="ui-icon" aria-hidden="true"><use href="#i-pointer"/></svg> Toca los puntos azules</span></div>
+    <button class="whatsapp-button" id="quick-quote" type="button"><span aria-hidden="true">◉</span> Cotiza tu seguro</button>
+  </div>
+
+  <div class="guide-overlay" id="guide-overlay" hidden>
+    <div class="drawer-scrim" data-close-guide></div>
+    <aside class="guide-panel" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+      <div class="drawer-head"><img src="assets/sky-logo.svg" alt="Sky Insurance"><button type="button" class="close-btn" data-close-guide aria-label="Cerrar guía">×</button></div>
+      <div class="drawer-body"><span class="section-kicker">BIENVENIDO AL MUNDO SKY</span><h2 id="guide-title">Explora y descubre tu protección.</h2><p>Arrastra la ciudad para recorrerla, usa la rueda para acercarte y selecciona los puntos azules. El menú reúne todos los mundos disponibles.</p><div class="guide-steps"><span>01 <strong>Explora</strong></span><span>02 <strong>Elige un mundo</strong></span><span>03 <strong>Solicita una cotización</strong></span></div><button class="primary-btn" type="button" id="close-guide-cta">Explorar la ciudad <span aria-hidden="true">→</span></button></div>
+    </aside>
+  </div>
+
+  <div class="panel-overlay" id="panel-overlay" hidden>
+    <div class="panel-scrim" data-close-panel></div>
+    <aside class="insurance-panel" id="insurance-panel" role="dialog" aria-modal="true" aria-labelledby="panel-title" tabindex="-1">
+      <div class="panel-top"><img class="panel-logo" src="assets/sky-logo.svg" alt="Sky Insurance"><button class="close-btn" type="button" data-close-panel aria-label="Cerrar panel">×</button></div>
+      <div class="panel-scroll"><span class="section-kicker" id="panel-kicker">TU PROTECCIÓN</span><h2 id="panel-title"></h2><p id="panel-description"></p><div class="coverage-heading">Opciones de seguro</div><div id="coverage-options" class="coverage-options"></div><div class="panel-note">La cobertura, condiciones y precio se confirman durante la cotización.</div><button class="primary-btn panel-cta" type="button" id="quote-button">Solicitar cotización <span aria-hidden="true">→</span></button><form id="quote-form" hidden><label for="client-name">¿Cómo te llamas?</label><input id="client-name" name="name" type="text" autocomplete="name" maxlength="80" required placeholder="Tu nombre"><p class="form-hint">Te llevaremos a WhatsApp con un mensaje listo para enviar.</p><button class="primary-btn panel-cta" type="submit">Continuar en WhatsApp <span aria-hidden="true">↗</span></button></form></div>
+    </aside>
+  </div>
+</body>
+</html>
