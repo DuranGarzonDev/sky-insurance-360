@@ -519,7 +519,7 @@
     },
     interior: {
       muebles: ['Muebles', 'Protección para sofás, mesas, sillas y mobiliario del hogar.'],
-      televisores: ['Televisores', 'Protección para televisores y equipos audiovisuales declarados.'],
+      terraza: ['Terraza', 'Protección para muebles y elementos de exterior previamente declarados.'],
       comedor: ['Comedor', 'Respaldo para mesa, sillas y mobiliario del comedor.'],
       decoracion: ['Decoración', 'Alternativas para objetos decorativos previamente declarados.'],
       sala: ['Sala', 'Protección para el conjunto de muebles y elementos de la sala.']
@@ -527,10 +527,10 @@
   };
   const HOME_HOTSPOTS = {
     fachada: [
-      ['techo','46%','15%','1'],['paredes','39%','41%','2'],['ventanas','62%','34%','3'],['puertas','54%','56%','4'],['pisos','50%','80%','5']
+      ['techo','48%','10%','1'],['paredes','58%','39%','2'],['ventanas','47%','30%','3'],['puertas','49%','57%','4'],['pisos','49%','84%','5']
     ],
     interior: [
-      ['televisores','11%','30%','1'],['comedor','73%','38%','2'],['muebles','9%','69%','3'],['decoracion','35%','52%','4'],['sala','82%','63%','5']
+      ['terraza','35%','47%','1'],['comedor','69%','45%','2'],['muebles','16%','65%','3'],['decoracion','69%','27%','4'],['sala','55%','65%','5']
     ]
   };
   let homeState = 'idle';
