@@ -39,13 +39,25 @@
       ['Seguro de moto', 'Protección para tu motocicleta según las coberturas contratadas.'],
       ['Responsabilidad civil para moto', 'Respaldo ante daños causados a terceros.']
     ]},
-    carro: { title: 'Protege tu carro', kicker: 'VEHÍCULOS / CARRO', description: 'Alternativas para afrontar imprevistos en carretera.', coverages: [
-      ['Seguro de auto', 'Protección para tu vehículo según las coberturas contratadas.'],
-      ['Responsabilidad civil para auto', 'Respaldo ante daños causados a terceros.']
+    particular: { title: 'Protege tu vehículo particular', kicker: 'VEHÍCULOS / PARTICULARES', description: 'Alternativas para conducir con respaldo ante imprevistos en carretera.', coverages: [
+      ['Seguro todo riesgo', 'Protección por daños, pérdida y eventos cubiertos según la póliza.'],
+      ['Responsabilidad civil', 'Respaldo ante daños causados a terceros.'],
+      ['Asistencia en carretera', 'Servicios de apoyo durante tus recorridos según el plan contratado.']
     ]},
-    avion: { title: 'Protege tu avión', kicker: 'VEHÍCULOS / AVIACIÓN', description: 'Alternativas para aeronaves y responsabilidad aeronáutica.', coverages: [
-      ['Seguro de aeronave', 'Protección para la aeronave según la póliza contratada.'],
-      ['Responsabilidad civil aeronáutica', 'Respaldo ante riesgos frente a terceros.']
+    taxi: { title: 'Protege tu taxi', kicker: 'VEHÍCULOS / TAXIS', description: 'Coberturas para proteger el vehículo, al conductor y a sus pasajeros.', coverages: [
+      ['Seguro para taxi', 'Protección del vehículo ante eventos cubiertos.'],
+      ['Responsabilidad civil contractual', 'Respaldo para pasajeros según las condiciones contratadas.'],
+      ['Responsabilidad civil extracontractual', 'Protección frente a daños ocasionados a terceros.']
+    ]},
+    pesado: { title: 'Protege tu vehículo pesado', kicker: 'VEHÍCULOS / PESADOS', description: 'Soluciones para camiones y vehículos vinculados a operaciones de carga.', coverages: [
+      ['Seguro para vehículo pesado', 'Protección del vehículo según su operación y las coberturas contratadas.'],
+      ['Responsabilidad civil', 'Respaldo frente a daños a terceros durante la operación.'],
+      ['Asistencia especializada', 'Apoyo en carretera de acuerdo con el plan contratado.']
+    ]},
+    colectiva: { title: 'Protege tu vehículo colectivo', kicker: 'VEHÍCULOS / COLECTIVAS', description: 'Protección para vehículos de transporte colectivo y sus ocupantes.', coverages: [
+      ['Seguro para transporte colectivo', 'Cobertura del vehículo ante los eventos contratados.'],
+      ['Responsabilidad civil contractual', 'Respaldo para los pasajeros transportados.'],
+      ['Responsabilidad civil extracontractual', 'Protección ante daños ocasionados a terceros.']
     ]},
     'construccion-transporte': { title: 'Construcción y transporte', kicker: 'PROYECTOS', description: 'Opciones para proteger obras y mercancías en movimiento.', coverages: [
       ['Todo riesgo construcción', 'Protección de la obra durante su ejecución.'],
@@ -57,7 +69,7 @@
     empresa: { title: 'EMPRESARIAL', icon: 'building', product: 'empresa', route: 'empresa', benefits: ['Protección del patrimonio', 'Continuidad de la operación', 'Responsabilidad frente a terceros'] },
     hogar: { title: 'HOGAR', icon: 'house', route: 'hogar', product: 'hogar', benefits: ['Vivienda y contenidos', 'Daños accidentales cubiertos', 'Responsabilidad civil familiar'] },
     construccion: { title: 'CONSTRUCCIÓN', icon: 'hard-hat', product: 'construccion', benefits: ['Obra y maquinaria', 'Riesgos durante la ejecución', 'Responsabilidad civil de obra'] },
-    vehiculos: { title: 'VEHÍCULOS', icon: 'car', route: 'vehiculos', product: 'carro', benefits: ['Autos y motocicletas', 'Daños y asistencia', 'Responsabilidad frente a terceros'] },
+    vehiculos: { title: 'VEHÍCULOS', icon: 'car', route: 'vehiculos', product: 'particular', benefits: ['Motos, particulares y taxis', 'Vehículos pesados y colectivos', 'Daños, asistencia y responsabilidad'] },
     transporte: { title: 'TRANSPORTE', icon: 'truck', product: 'transporte', benefits: ['Camiones y carga', 'Mercancías en movimiento', 'Coberturas según el recorrido'] },
     responsabilidad: { title: 'RESPONSABILIDAD CIVIL', icon: 'shield', product: 'responsabilidad', benefits: ['Daños a terceros', 'Protección para peatones y ciclistas', 'Responsabilidad en motocicletas', 'Acompañamiento jurídico'] },
     vida: { title: 'VIDA Y SALUD', icon: 'heart', product: 'vida-salud', benefits: ['Protección personal y familiar', 'Alternativas de atención en salud', 'Respaldo económico'] }
@@ -76,6 +88,8 @@
   const companyView = $('#company-view');
   const homeView = $('#home-view');
   const vehiclesView = $('#vehicles-view');
+  const vehicleFilm = $('#vehicle-film');
+  const vehicleFilmVideo = $('#vehicle-film-video');
   const viewport = $('#city-viewport');
   const scene = $('#city-scene');
   const worldMenu = $('#world-menu');
@@ -181,18 +195,34 @@
     zoomAt(event.deltaY < 0 ? 1.08 : .92, event.clientX - box.left, event.clientY - box.top);
   }, { passive: false });
 
-  function layoutVehicles() {
-    const svg = $('#vehicles-svg');
-    const options = $$('.vehicle-option');
-    if (window.innerWidth <= 700) {
-      svg.setAttribute('viewBox', '0 0 340 1170');
-      options[0].setAttribute('transform', 'translate(0 0)');
-      options[1].setAttribute('transform', 'translate(-370 390)');
-      options[2].setAttribute('transform', 'translate(-740 780)');
-    } else {
-      svg.setAttribute('viewBox', '0 0 1080 390');
-      options.forEach(option => option.removeAttribute('transform'));
-    }
+  function layoutVehicles() {}
+
+  let pendingVehicleProduct = null;
+  let lastVehicleCard = null;
+
+  function closeVehicleFilm(showCoverages = false) {
+    if (vehicleFilm.hidden) return;
+    vehicleFilmVideo.pause();
+    vehicleFilm.hidden = true;
+    vehicleFilmVideo.removeAttribute('src');
+    vehicleFilmVideo.load();
+    $('#vehicles-view .vehicles-content').inert = false;
+    const product = pendingVehicleProduct;
+    pendingVehicleProduct = null;
+    if (showCoverages && product) openProduct(product);
+    else lastVehicleCard?.focus();
+  }
+
+  async function playVehicleFilm(card) {
+    lastVehicleCard = card;
+    pendingVehicleProduct = card.dataset.vehicleProduct;
+    $('#vehicle-film-label').textContent = `Conociendo ${card.querySelector('b').textContent.trim()}…`;
+    vehicleFilmVideo.src = card.dataset.vehicleVideo;
+    vehicleFilm.hidden = false;
+    $('#vehicles-view .vehicles-content').inert = true;
+    vehicleFilmVideo.currentTime = 0;
+    try { await vehicleFilmVideo.play(); }
+    catch (_) { closeVehicleFilm(true); }
   }
 
   function setWorldChrome(visible) {
@@ -535,6 +565,7 @@
   };
   let homeState = 'idle';
   let homeMode = 'fachada';
+  let homeIncludeContents = false;
 
   function rebuildHomeHotspots(mode) {
     const holder = $('#home-hotspots');
@@ -559,6 +590,34 @@
     $('#home-estimated-value').textContent = format(structureValue + (homeMode === 'interior' ? contentsValue : 0));
   }
 
+  function showHomeReview(includeContents) {
+    homeIncludeContents = includeContents;
+    $('#review-home-address').textContent = $('#home-address').value.trim() || 'Dirección por confirmar';
+    $('#review-home-value').textContent = $('#home-structure-value').textContent;
+    $('#review-contents-section').hidden = !includeContents;
+    $('#review-contents-value').textContent = $('#home-contents-summary').textContent;
+    const selectedTypes = $$('[data-content-type]:checked').map(input => input.dataset.contentType);
+    $('#review-contents-types').textContent = selectedTypes.join(', ') || 'Sin categorías adicionales';
+    const selectedRisks = $$('[data-home-risk]:checked').map(input => input.dataset.homeRisk);
+    $('#review-home-risks').textContent = selectedRisks.join(', ') || 'Por definir con un asesor';
+    $('#home-step-two').textContent = includeContents ? '✓' : '2';
+    $('#home-step-two').classList.toggle('is-done', includeContents);
+    $('#home-step-two').classList.remove('is-active');
+    $('#home-step-three').classList.add('is-active');
+    homeView.classList.add('is-reviewing');
+    $('#home-review').hidden = false;
+    $('#home-contact-name').focus();
+  }
+
+  function closeHomeReview() {
+    $('#home-review').hidden = true;
+    homeView.classList.remove('is-reviewing');
+    $('#home-step-three').classList.remove('is-active');
+    $('#home-step-two').textContent = '2';
+    $('#home-step-two').classList.remove('is-done');
+    $('#home-step-two').classList.toggle('is-active', homeMode === 'interior');
+  }
+
   function selectHomeItem(key) {
     const item = HOME_ITEMS[homeMode][key];
     if (!item) return;
@@ -579,7 +638,9 @@
     $('#home-step-one').classList.toggle('is-done', interior);
     $('#home-step-one').classList.toggle('is-active', !interior);
     $('#home-step-two').classList.toggle('is-active', interior);
-    $('#home-step-label').textContent = 'Infraestructura';
+    $('#home-step-two').classList.remove('is-done');
+    $('#home-step-three').classList.remove('is-active', 'is-done');
+    $('#home-step-label').textContent = 'Tu vivienda';
     $('#home-config-kicker').textContent = interior ? 'PASO 2' : 'PASO 1';
     $('#home-config-title').textContent = interior ? 'Muebles y enseres' : 'Infraestructura';
     $('#home-structure-fields').hidden = interior;
@@ -665,6 +726,7 @@
 
   async function leaveHomeJourney() {
     if (homeState === 'transition') return;
+    if (!$('#home-review').hidden) closeHomeReview();
     closeHomeQuestion();
     if (homeState === 'interior') {
       await playHomeVideo('assets/home/leave-interior.mp4');
@@ -684,10 +746,23 @@
   $('#home-building-value').addEventListener('input', updateHomeEstimate);
   $('#home-contents-value').addEventListener('input', updateHomeEstimate);
   $$('.property-type button').forEach(button => button.addEventListener('click', () => { $$('.property-type button').forEach(item=>item.classList.toggle('is-active',item===button));updateHomeEstimate(); }));
-  $('#home-continue').addEventListener('click', () => { if(homeMode==='interior')openProduct('muebles');else showHomeQuestion(); });
+  $('#home-continue').addEventListener('click', () => { if(homeMode==='interior')showHomeReview(true);else showHomeQuestion(); });
   $('#home-yes-furniture').addEventListener('click', enterHomeInterior);
-  $('#home-no-furniture').addEventListener('click', () => { closeHomeQuestion();openProduct('hogar'); });
-  $('#home-quote').addEventListener('click', () => { if (homeMode === 'interior') openProduct('muebles'); else showHomeQuestion(); });
+  $('#home-no-furniture').addEventListener('click', () => { closeHomeQuestion();showHomeReview(false); });
+  $('#home-quote').addEventListener('click', () => { if (homeMode === 'interior') showHomeReview(true); else showHomeQuestion(); });
+  $('#home-review-close').addEventListener('click', closeHomeReview);
+  $('#home-review-back').addEventListener('click', closeHomeReview);
+  $('#home-review-form').addEventListener('submit', event => {
+    event.preventDefault();
+    if (!event.currentTarget.reportValidity()) return;
+    const name = $('#home-contact-name').value.trim();
+    const phone = $('#home-contact-phone').value.trim();
+    const email = $('#home-contact-email').value.trim();
+    const risks = $$('[data-home-risk]:checked').map(input => input.dataset.homeRisk).join(', ');
+    const contents = homeIncludeContents ? ` También deseo asegurar muebles y enseres por ${$('#home-contents-summary').textContent}. Coberturas de interés: ${risks || 'por definir con un asesor'}.` : '';
+    const message = `Hola, equipo de Sky. Soy ${name}. Deseo cotizar un seguro de hogar para ${$('#home-address').value.trim()}, con un valor de vivienda de ${$('#home-structure-value').textContent}.${contents} Mis datos de contacto son ${phone} y ${email}.`;
+    window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  });
   $('#home-protection').addEventListener('click', () => {homeConfig.classList.remove('is-open');homeSummary.classList.add('is-open');});
   $('#home-help').addEventListener('click', openGuide);
   $('#home-assistance').addEventListener('click', () => openProduct('hogar'));
@@ -709,6 +784,7 @@
     if (zoneTarget) {
       if (zoneTarget.dataset.zone === 'empresa') startCompanyJourney();
       else if (zoneTarget.dataset.zone === 'hogar') startHomeJourney();
+      else if (zoneTarget.dataset.zone === 'vehiculos') setView('vehicles');
       else selectZone(zoneTarget.dataset.zone);
       return;
     }
@@ -749,7 +825,15 @@
     if (!homeView.hidden) { leaveHomeJourney(); return; }
     setView('city'); layoutScene(); selectZone('responsabilidad', false);
   });
-  $('#back-to-city').addEventListener('click', () => setView('city'));
+  $('#vehicle-cards').addEventListener('click', event => {
+    const card = event.target.closest('[data-vehicle-product]');
+    if (card) playVehicleFilm(card);
+  });
+  vehicleFilmVideo.addEventListener('ended', () => closeVehicleFilm(true));
+  vehicleFilmVideo.addEventListener('error', () => closeVehicleFilm(true));
+  $('#vehicle-film-skip').addEventListener('click', () => closeVehicleFilm(true));
+  $('#vehicle-film-close').addEventListener('click', () => closeVehicleFilm(false));
+  $('#back-to-city').addEventListener('click', () => { closeVehicleFilm(false); setView('city'); });
   $('#company-back').addEventListener('click', returnCompanyJourney);
   $('#zoom-in').addEventListener('click', () => zoomAt(1.2));
   $('#zoom-out').addEventListener('click', () => zoomAt(1/1.2));
@@ -758,12 +842,14 @@
   $('#company-zoom-out').addEventListener('click', () => zoomCompanyAt(1/1.2));
   $('#company-zoom-reset').addEventListener('click', layoutCompanyStage);
   document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !vehicleFilm.hidden) { closeVehicleFilm(false); return; }
     if (event.key === 'Escape' && !overlay.hidden) { closePanel(); return; }
     if (event.key === 'Escape' && !guide.hidden) { closeGuide(); return; }
     if (event.key === 'Escape' && worldMenu.classList.contains('is-open')) { worldMenu.classList.remove('is-open'); return; }
     if (event.key === 'Escape' && zonePanel.classList.contains('is-open')) { zonePanel.classList.remove('is-open'); return; }
     if (event.key === 'Escape' && companyState === 'arrived') { returnCompanyJourney(); return; }
     if (event.key === 'Escape' && !homeView.hidden) {
+      if (!$('#home-review').hidden) { closeHomeReview(); return; }
       if (!$('#home-question').hidden) { closeHomeQuestion(); return; }
       leaveHomeJourney(); return;
     }

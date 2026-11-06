@@ -28,7 +28,7 @@ Abre `index.html` y elige **Open with Live Server**. Live Server es opcional.
 - `index.html`: introducción, Ciudad Maestra, siete mundos SVG, recorridos de Empresa y Hogar, vista de vehículos, guía y panel de cotización.
 - `styles.css`: interfaz de la Ciudad Maestra y Mundo Hogar, animaciones de descubrimiento, estados de selección y adaptación móvil.
 - `app.js`: secuencia de entrada, paneo/zoom, selección de mundos, recorridos, catálogo y WhatsApp.
-- `assets/city-master.webp`: versión web optimizada de la panorámica `01 - CIUDAD SKY INSURANCE -01.png`, de 8192 × 4096.
+- `assets/city-master.webp`: versión web optimizada de la panorámica `HOME-7.png` recibida en Drive el 4 de noviembre de 2026.
 - `assets/city-master.png`: copia local de la panorámica maestra actualizada para edición.
 - `assets/sky-logo.svg`: logotipo vectorial local de Sky.
 - `assets/intro-city.mp4`: video local de 8 segundos que construye la Ciudad Maestra antes de mostrar el visor.
@@ -37,6 +37,8 @@ Abre `index.html` y elige **Open with Live Server**. Live Server es opcional.
 - `assets/home/interior.webp`: panorama limpio de muebles y enseres.
 - `assets/home/portal.webp`: panorama limpio con el umbral luminoso usado durante la decisión de ingreso.
 - `assets/home/*.mp4`: cuatro transiciones bidireccionales de Hogar, convertidas a H.264, 1280 × 720 y optimizadas para navegador.
+- `assets/vehicles/*.webp`: imágenes locales de las cinco categorías de vehículos: motos, particulares, taxis, pesados y colectivas.
+- `assets/vehicles/*.mp4`: videos H.264 locales de 10 segundos para la introducción de cada categoría de vehículos.
 
 El orden de entrada es: logo con barra pequeña, video de presentación, panorámica limpia, aparición secuencial de los siete marcadores, indicación animada de arrastre y despliegue de la interfaz completa. La barra llega al 100 % después de cargar la panorámica y preparar el video. Si la imagen principal falta, aparece un botón de reintento; si el navegador no puede reproducir el video, el flujo continúa con el descubrimiento de marcadores.
 
@@ -46,7 +48,7 @@ El SVG original de Drive contiene únicamente una etiqueta `<image>`; los edific
 
 Cada marcador y cada opción del menú usa `data-zone`. Su contenido, beneficios, producto y destino están centralizados en `ZONES` de `app.js`; los textos de cotización están en `PRODUCTS`. Conserva `tabindex="0"`, `role="button"` y `aria-label` en los grupos interactivos. El brillo del croquis solo aparece mientras el puntero está encima; seleccionar otra categoría actualiza el panel sin dejar el contorno encendido. La aparición progresiva se controla desde `styles.css`.
 
-La vista secundaria usa `#vehicles-svg` y tres grupos `vehicle-moto`, `vehicle-carro`, `vehicle-avion`. En anchos de 700 px o menos, `app.js` cambia el `viewBox` y apila los mismos vectores; los clics siguen funcionando. En móvil, el menú de mundos y el resumen seleccionado se convierten en paneles deslizables para conservar la panorámica visible.
+La vista secundaria de vehículos usa cinco tarjetas HTML identificadas con `data-vehicle-product`. Cada tarjeta reproduce su video local y, al finalizar o pulsar **Ver coberturas**, abre el panel correspondiente. La cuadrícula se adapta a escritorio, tableta y móvil sin superponer textos ni controles.
 
 ## Entrada cinematográfica a Empresa
 
@@ -72,7 +74,7 @@ El catálogo `PRODUCTS` contiene textos de demostración, no coberturas contract
 
 ## Recorrido de Hogar
 
-Seleccionar **Hogar** desde el croquis o el menú inicia directamente el video de acercamiento y abre la fachada. En esa vista el usuario configura tipo de vivienda, dirección, valor de construcción, área, pisos, antigüedad, zona, material y seguridad; los cinco puntos del panorama explican cada elemento asegurable. Al continuar, la aplicación cambia al panorama del portal y pregunta si desea incluir muebles y enseres. La respuesta afirmativa reproduce la entrada a la vivienda y cambia el panorama, los puntos y la cotización a bienes muebles.
+Seleccionar **Hogar** desde el croquis o el menú inicia directamente el video de acercamiento y abre la fachada. En esa vista el usuario configura tipo de vivienda, dirección, valor de construcción, área, pisos, antigüedad, zona, material y seguridad; los cinco puntos del panorama explican cada elemento asegurable. Al continuar, la aplicación cambia al panorama del portal y pregunta si desea incluir muebles y enseres. La respuesta afirmativa reproduce la entrada a la vivienda y cambia el panorama, los puntos y la cotización a bienes muebles. El paso final resume vivienda, contenidos y coberturas de interés, valida los datos de contacto y genera la solicitud de WhatsApp.
 
 Los botones **Volver**, **Infraestructura** y la tecla `Esc` reproducen las transiciones inversas correspondientes. Los paneles laterales se convierten en controles desplegables en móvil para conservar visible el panorama y sus zonas pulsables.
 
