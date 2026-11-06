@@ -29,7 +29,7 @@ Abre `index.html` y elige **Open with Live Server**. Live Server es opcional.
 - `styles.css`: interfaz de la Ciudad Maestra y Mundo Hogar, animaciones de descubrimiento, estados de selección y adaptación móvil.
 - `app.js`: secuencia de entrada, paneo/zoom, selección de mundos, recorridos, catálogo y WhatsApp.
 - `assets/city-master.webp`: versión web optimizada de la panorámica `HOME-7.png` recibida en Drive el 4 de noviembre de 2026.
-- `assets/city-master.png`: copia local de la panorámica maestra actualizada para edición.
+- `assets/city-master.png`: copia maestra local para edición. Se excluye del repositorio y de GitHub Pages porque la web utiliza el WebP optimizado.
 - `assets/sky-logo.svg`: logotipo vectorial local de Sky.
 - `assets/intro-city.mp4`: video local de 8 segundos que construye la Ciudad Maestra antes de mostrar el visor.
 - `assets/company/*.webp`: siete panoramas locales optimizados para la ruta de Empresa. Provienen de los archivos EMPRESA-02, 03, 04, 05, 06, 09 y 10 de la carpeta de Drive.
