@@ -72,7 +72,16 @@
     vehiculos: { title: 'VEHÍCULOS', icon: 'car', route: 'vehiculos', product: 'particular', benefits: ['Motos, particulares y taxis', 'Vehículos pesados y colectivos', 'Daños, asistencia y responsabilidad'] },
     transporte: { title: 'TRANSPORTE', icon: 'truck', product: 'transporte', benefits: ['Camiones y carga', 'Mercancías en movimiento', 'Coberturas según el recorrido'] },
     responsabilidad: { title: 'RESPONSABILIDAD CIVIL', icon: 'shield', product: 'responsabilidad', benefits: ['Daños a terceros', 'Protección para peatones y ciclistas', 'Responsabilidad en motocicletas', 'Acompañamiento jurídico'] },
-    vida: { title: 'VIDA Y SALUD', icon: 'heart', product: 'vida-salud', benefits: ['Protección personal y familiar', 'Alternativas de atención en salud', 'Respaldo económico'] }
+    vida: { title: 'VIDA Y SALUD', icon: 'heart', product: 'vida-salud', benefits: ['Seguro de vida', 'Seguro de salud', 'Accidentes personales'] },
+    pymes: { title: 'PYMES Y COMERCIO', icon: 'building', product: 'pymes', benefits: ['Local, inventario y equipos', 'Responsabilidad civil', 'Asistencia para tu negocio'] },
+    moto: { title: 'MOTOS', icon: 'car', vehicle: 'moto', product: 'moto', benefits: ['Seguro de moto', 'Responsabilidad civil'] },
+    taxi: { title: 'TAXIS', icon: 'car', vehicle: 'taxi', product: 'taxi', benefits: ['Protección del vehículo', 'Responsabilidad civil'] },
+    ciclistas: { title: 'CICLISTAS', icon: 'shield', product: 'ciclistas', benefits: ['Consulta opciones de protección para ciclistas', 'Orientación para cotizar'] }
+  };
+  PRODUCTS.ciclistas = {
+    title: 'Protección para ciclistas', kicker: 'MOVILIDAD',
+    description: 'Consulta con un asesor las opciones disponibles para tus recorridos.',
+    coverages: [['Protección para ciclistas', 'Un asesor confirmará las opciones para tu caso.']]
   };
 
   const $ = (selector) => document.querySelector(selector);
@@ -131,7 +140,7 @@
     sceneSize = { width: imageHeight * 2, height: imageHeight };
     scene.style.width = `${sceneSize.width}px`;
     scene.style.height = `${sceneSize.height}px`;
-    pan.scale = window.innerWidth <= 700 ? 1.15 : 1.3;
+    pan.scale = w <= 700 ? 1.15 : Math.min(1.22, Math.max(1.05, w / (1.48 * imageHeight)));
     pan.x = (w - sceneSize.width * pan.scale) / 2;
     pan.y = (h - sceneSize.height * pan.scale) / 2;
     clampPan();
@@ -195,10 +204,11 @@
     zoomAt(event.deltaY < 0 ? 1.08 : .92, event.clientX - box.left, event.clientY - box.top);
   }, { passive: false });
 
-  function layoutVehicles() {}
-
   let pendingVehicleProduct = null;
   let lastVehicleCard = null;
+  let preferredInsurer = '';
+  let companyDestination = false;
+  const skyQuoteEmail = 'camilovargasfraile@gmail.com';
 
   function closeVehicleFilm(showCoverages = false) {
     if (vehicleFilm.hidden) return;
@@ -207,9 +217,13 @@
     vehicleFilmVideo.removeAttribute('src');
     vehicleFilmVideo.load();
     $('#vehicles-view .vehicles-content').inert = false;
+    $('#back-to-city').inert = false;
     const product = pendingVehicleProduct;
     pendingVehicleProduct = null;
-    if (showCoverages && product) openProduct(product);
+    if (showCoverages && product) {
+      lastVehicleCard?.focus();
+      openProduct(product);
+    }
     else lastVehicleCard?.focus();
   }
 
@@ -220,9 +234,28 @@
     vehicleFilmVideo.src = card.dataset.vehicleVideo;
     vehicleFilm.hidden = false;
     $('#vehicles-view .vehicles-content').inert = true;
+    $('#back-to-city').inert = true;
+    $('#vehicle-film-skip').focus();
     vehicleFilmVideo.currentTime = 0;
     try { await vehicleFilmVideo.play(); }
     catch (_) { closeVehicleFilm(true); }
+  }
+
+  function goToVehicle(key) {
+    setView('vehicles');
+    const card = document.querySelector('[data-vehicle-product="' + key + '"]');
+    if (card) playVehicleFilm(card);
+  }
+
+  function returnFromChild(focusTarget) {
+    if (companyDestination) {
+      companyDestination = false;
+      setView('company');
+      $('#company-services button').focus();
+      return;
+    }
+    setView('city');
+    $(focusTarget).focus();
   }
 
   function setWorldChrome(visible) {
@@ -241,12 +274,12 @@
       cityNeedsLayout = false;
     }
     if (view === 'vehicles') $('#back-to-city').focus();
+    $('#back-to-city').textContent = companyDestination ? '← Volver a Empresarial' : '← Volver a la ciudad';
   }
 
   window.addEventListener('resize', () => {
     if (cityView.hidden) cityNeedsLayout = true;
     else layoutScene();
-    layoutVehicles();
     if (!companyView.hidden && companyState === 'arrived') layoutCompanyStage();
   });
 
@@ -283,10 +316,15 @@
     if (zone.route === 'empresa') startCompanyJourney();
     else if (zone.route === 'hogar') startHomeJourney();
     else if (zone.route === 'vehiculos') setView('vehicles');
+    else if (zone.vehicle) goToVehicle(zone.vehicle);
     else openProduct(zone.product);
   }
 
   function openProduct(key) {
+    if (window.SkyQuotes.has(key)) {
+      window.SkyQuotes.open(key, { phone: WHATSAPP_NUMBER, insurer: preferredInsurer });
+      return;
+    }
     const product = PRODUCTS[key];
     if (!product) return;
     currentProduct = key;
@@ -355,6 +393,8 @@
   /* Recorrido Empresarial */
   const companyViewport = $('#company-viewport');
   const companyStage = $('#company-stage');
+  const companyFilm = $('#company-film');
+  const companySkip = $('#company-skip');
   const companyFrames = $$('.company-frame');
   const journeyProgress = $('#journey-progress-bar');
   const cinemaSpeed = $('.cinema-speed');
@@ -461,6 +501,41 @@
       requestAnimationFrame(tick);
     });
   }
+  function playCompanyFilm(source) {
+    if (reducedMotion.matches) return Promise.resolve(true);
+    return new Promise(resolve => {
+      const timeout = window.setTimeout(fail, 18000);
+      function finish(played) {
+        window.clearTimeout(timeout);
+        companyFilm.removeEventListener('ended', done);
+        companyFilm.removeEventListener('error', fail);
+        companySkip.removeEventListener('click', done);
+        companyFilm.pause();
+        companyFilm.hidden = true;
+        companySkip.hidden = true;
+        companyFilm.removeAttribute('src');
+        companyFilm.load();
+        resolve(played);
+      }
+      function done() { finish(true); }
+      function fail() { finish(false); }
+      companyFilm.addEventListener('ended', done);
+      companyFilm.addEventListener('error', fail);
+      companySkip.addEventListener('click', done);
+      companyFilm.src = source;
+      companyFilm.hidden = false;
+      companySkip.hidden = false;
+      companySkip.focus();
+      companyFilm.play().catch(() => { if (!companyFilm.hidden) fail(); });
+    });
+  }
+
+  function showCompanyAllies() {
+    $('#company-services').hidden = true;
+    $('#company-allies').hidden = false;
+    $('#company-allies button').focus();
+  }
+
   async function startCompanyJourney() {
     if (companyState !== 'idle') return;
     companyState = 'preparing';
@@ -472,18 +547,20 @@
     $('#company-arrival').hidden = true;
     companyViewport.inert = true;
     try {
-      await preloadCompanyAssets();
       companyState = 'forward';
       companyView.classList.add('is-traveling');
-      await animateCompany(false, departurePan);
+      if (!await playCompanyFilm('assets/company/enter.mp4')) {
+        await preloadCompanyAssets();
+        await animateCompany(false, departurePan);
+      }
       companyState = 'arrived';
       layoutCompanyStage();
       companyView.classList.remove('is-traveling');
       companyView.classList.add('is-arrived');
       $('#company-travel-status').hidden = true;
       $('#company-arrival').hidden = false;
-      companyViewport.inert = false;
-      $('#company-arrival button').focus();
+      preferredInsurer = '';
+      showCompanyAllies();
     } catch (error) {
       console.error(error);
       companyState = 'idle';
@@ -504,12 +581,15 @@
     $('#company-travel-status').hidden = false;
     $('#company-travel-status').textContent = 'Volviendo al Mundo Sky…';
     companyViewport.inert = true;
-    await animateCompany(true, { ...companyPan });
+    if (!await playCompanyFilm('assets/company/return.mp4') && companyAssetsPromise) {
+      await animateCompany(true, { ...companyPan });
+    }
     companyView.classList.remove('is-traveling');
     $('#company-travel-status').hidden = true;
     $('#company-travel-status').textContent = 'Entrando a Sky Insurance…';
     companyViewport.inert = false;
     companyState = 'idle';
+    preferredInsurer = '';
     setView('city');
     $('#hotspot-empresa').focus();
   }
@@ -566,6 +646,7 @@
   let homeState = 'idle';
   let homeMode = 'fachada';
   let homeIncludeContents = false;
+  let homeReviewTrigger = null;
 
   function rebuildHomeHotspots(mode) {
     const holder = $('#home-hotspots');
@@ -581,18 +662,28 @@
     }));
   }
 
+  const homeCurrency = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
+  function specialHomeItems() {
+    return $$('[data-home-special]').map(input => ({
+      label: input.dataset.homeSpecial,
+      value: Number(input.value)
+    })).filter(item => item.value > 0);
+  }
+
   function updateHomeEstimate() {
-    const format = value => new Intl.NumberFormat('es-CO', { style:'currency', currency:'COP', maximumFractionDigits:0 }).format(value);
     const structureValue = Math.max(50000000, Number($('#home-building-value').value) || 1200000000);
-    const contentsValue = Math.max(5000000, Number($('#home-contents-value').value) || 80000000);
-    $('#home-structure-value').textContent = format(structureValue);
-    $('#home-contents-summary').textContent = format(contentsValue);
-    $('#home-estimated-value').textContent = format(structureValue + (homeMode === 'interior' ? contentsValue : 0));
+    const contentsValue = Math.max(5000000, Number($('#home-contents-value').value) || 80000000)
+      + specialHomeItems().reduce((total, item) => total + item.value, 0);
+    $('#home-structure-value').textContent = homeCurrency.format(structureValue);
+    $('#home-contents-summary').textContent = homeCurrency.format(contentsValue);
+    $('#home-estimated-value').textContent = homeCurrency.format(structureValue + (homeMode === 'interior' ? contentsValue : 0));
   }
 
   function showHomeReview(includeContents) {
+    homeReviewTrigger = document.activeElement;
     homeIncludeContents = includeContents;
     $('#review-home-address').textContent = $('#home-address').value.trim() || 'Dirección por confirmar';
+    $('#review-home-property').textContent = $('.property-type .is-active').textContent.trim();
     $('#review-home-value').textContent = $('#home-structure-value').textContent;
     $('#review-contents-section').hidden = !includeContents;
     $('#review-contents-value').textContent = $('#home-contents-summary').textContent;
@@ -600,22 +691,38 @@
     $('#review-contents-types').textContent = selectedTypes.join(', ') || 'Sin categorías adicionales';
     const selectedRisks = $$('[data-home-risk]:checked').map(input => input.dataset.homeRisk);
     $('#review-home-risks').textContent = selectedRisks.join(', ') || 'Por definir con un asesor';
+    const specialItems = specialHomeItems();
+    $('#review-home-special-row').hidden = !specialItems.length;
+    $('#review-home-special').textContent = specialItems.map(item => item.label + ': ' + homeCurrency.format(item.value)).join(' · ');
+    $('#home-step-one').textContent = '✓';
+    $('#home-step-one').classList.remove('is-active');
+    $('#home-step-one').classList.add('is-done');
     $('#home-step-two').textContent = includeContents ? '✓' : '2';
     $('#home-step-two').classList.toggle('is-done', includeContents);
     $('#home-step-two').classList.remove('is-active');
     $('#home-step-three').classList.add('is-active');
     homeView.classList.add('is-reviewing');
+    $('#home-scene').inert = true;
     $('#home-review').hidden = false;
     $('#home-contact-name').focus();
   }
 
   function closeHomeReview() {
     $('#home-review').hidden = true;
+    $('#home-scene').inert = false;
     homeView.classList.remove('is-reviewing');
     $('#home-step-three').classList.remove('is-active');
+    if (homeMode === 'fachada') {
+      $('#home-step-one').textContent = '1';
+      $('#home-step-one').classList.remove('is-done');
+      $('#home-step-one').classList.add('is-active');
+    }
     $('#home-step-two').textContent = '2';
     $('#home-step-two').classList.remove('is-done');
     $('#home-step-two').classList.toggle('is-active', homeMode === 'interior');
+    if (homeReviewTrigger?.getClientRects().length) homeReviewTrigger.focus();
+    else if (window.matchMedia('(max-width: 1180px), (max-height: 760px)').matches) $('#open-home-config').focus();
+    else $('#home-continue').focus();
   }
 
   function selectHomeItem(key) {
@@ -647,7 +754,7 @@
     $('#home-contents-fields').hidden = !interior;
     $('#home-contents-line').hidden = !interior;
     $('#home-protection-count').textContent = interior ? '2' : '1';
-    $('#home-back').textContent = interior ? '← Volver a infraestructura' : '← Volver al Mundo Sky';
+    $('#home-back').textContent = interior ? '← Volver a infraestructura' : companyDestination ? '← Volver a Empresarial' : '← Volver al Mundo Sky';
     $('#home-continue').textContent = interior ? 'Agregar a mi protección →' : 'Confirmar y continuar →';
     $('#home-quote').textContent = interior ? 'Siguiente: Resumen →' : 'Siguiente: Muebles y enseres →';
     $$('.home-bottom-nav [data-home-section]').forEach(button => button.classList.toggle('is-active', button.dataset.homeSection === (interior ? 'muebles' : 'infraestructura')));
@@ -736,8 +843,7 @@
     }
     if (homeState === 'facade') await playHomeVideo('assets/home/leave-home.mp4');
     homeState = 'idle';
-    setView('city');
-    $('#hotspot-hogar').focus();
+    returnFromChild('#hotspot-hogar');
   }
 
   $('#home-back').addEventListener('click', leaveHomeJourney);
@@ -745,6 +851,7 @@
   $('#home-area').addEventListener('input', () => { $('#home-building-value').value = Math.max(20, Number($('#home-area').value) || 250) * 4800000; updateHomeEstimate(); });
   $('#home-building-value').addEventListener('input', updateHomeEstimate);
   $('#home-contents-value').addEventListener('input', updateHomeEstimate);
+  $$('[data-home-special]').forEach(input => input.addEventListener('input', updateHomeEstimate));
   $$('.property-type button').forEach(button => button.addEventListener('click', () => { $$('.property-type button').forEach(item=>item.classList.toggle('is-active',item===button));updateHomeEstimate(); }));
   $('#home-continue').addEventListener('click', () => { if(homeMode==='interior')showHomeReview(true);else showHomeQuestion(); });
   $('#home-yes-furniture').addEventListener('click', enterHomeInterior);
@@ -758,10 +865,30 @@
     const name = $('#home-contact-name').value.trim();
     const phone = $('#home-contact-phone').value.trim();
     const email = $('#home-contact-email').value.trim();
-    const risks = $$('[data-home-risk]:checked').map(input => input.dataset.homeRisk).join(', ');
-    const contents = homeIncludeContents ? ` También deseo asegurar muebles y enseres por ${$('#home-contents-summary').textContent}. Coberturas de interés: ${risks || 'por definir con un asesor'}.` : '';
-    const message = `Hola, equipo de Sky. Soy ${name}. Deseo cotizar un seguro de hogar para ${$('#home-address').value.trim()}, con un valor de vivienda de ${$('#home-structure-value').textContent}.${contents} Mis datos de contacto son ${phone} y ${email}.`;
-    window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    const material = $('input[name="material"]:checked')?.parentElement.textContent.trim();
+    const lines = [
+      'Hola, equipo de Sky. Quiero solicitar una cotización de seguro de hogar.',
+      '',
+      `Nombre: ${name}`, `Celular: ${phone}`, `Correo: ${email}`,
+      `Dirección: ${$('#home-address').value.trim() || 'Por confirmar'}`,
+      `Tipo de inmueble: ${$('.property-type .is-active').textContent.trim()}`,
+      `Valor de construcción: ${$('#home-structure-value').textContent}`,
+      `Área: ${$('#home-area').value} m² · Pisos: ${$('#home-floors').value}`,
+      `Año: ${$('#home-year').value} · Zona: ${$('#home-zone').value} · Material: ${material}`,
+      `Seguridad: ${$$('[data-home-coverage]:checked').map(input => input.dataset.homeCoverage).join(', ') || 'Por confirmar'}`
+    ];
+    if (preferredInsurer) lines.push(`Aseguradora de preferencia: ${preferredInsurer}`);
+    if (homeIncludeContents) {
+      lines.push(`Muebles y enseres: ${$('#home-contents-summary').textContent}`);
+      lines.push(`Categorías: ${$('#review-contents-types').textContent}`, `Coberturas de interés: ${$('#review-home-risks').textContent}`);
+      if (!$('#review-home-special-row').hidden) lines.push(`Bienes especiales: ${$('#review-home-special').textContent}`);
+    }
+    const body = encodeURIComponent(lines.join('\n'));
+    if (event.submitter?.value === 'whatsapp') {
+      window.location.assign(`https://wa.me/${WHATSAPP_NUMBER}?text=${body}`);
+    } else {
+      window.location.assign(`mailto:${skyQuoteEmail}?subject=${encodeURIComponent('Solicitud de cotización de Hogar · Sky Insurance')}&body=${body}`);
+    }
   });
   $('#home-protection').addEventListener('click', () => {homeConfig.classList.remove('is-open');homeSummary.classList.add('is-open');});
   $('#home-help').addEventListener('click', openGuide);
@@ -785,22 +912,23 @@
       if (zoneTarget.dataset.zone === 'empresa') startCompanyJourney();
       else if (zoneTarget.dataset.zone === 'hogar') startHomeJourney();
       else if (zoneTarget.dataset.zone === 'vehiculos') setView('vehicles');
+      else if (ZONES[zoneTarget.dataset.zone]?.vehicle) goToVehicle(ZONES[zoneTarget.dataset.zone].vehicle);
       else selectZone(zoneTarget.dataset.zone);
       return;
     }
     const target = event.target.closest('[data-product],[data-route]');
     if (!target) return;
-    if (target.dataset.route === 'vehiculos') {
-      companyState = 'idle';
-      companyView.classList.remove('is-arrived');
-      setView('vehicles');
+    if (target.dataset.route) {
+      companyDestination = !companyView.hidden;
+      if (target.dataset.route === 'hogar') startHomeJourney();
+      else setView('vehicles');
       return;
     }
     openProduct(target.dataset.product);
   });
   $('#zone-action').addEventListener('click', activateSelectedZone);
   $('#advisor-button').addEventListener('click', () => openProduct(ZONES[selectedZone].product));
-  $('#quick-quote').addEventListener('click', () => openProduct(ZONES[selectedZone].product));
+  $('#quick-quote').addEventListener('click', activateSelectedZone);
   $('#open-guide').addEventListener('click', openGuide);
   $('#close-guide-cta').addEventListener('click', closeGuide);
   $('#menu-toggle').addEventListener('click', () => {
@@ -833,36 +961,50 @@
   vehicleFilmVideo.addEventListener('error', () => closeVehicleFilm(true));
   $('#vehicle-film-skip').addEventListener('click', () => closeVehicleFilm(true));
   $('#vehicle-film-close').addEventListener('click', () => closeVehicleFilm(false));
-  $('#back-to-city').addEventListener('click', () => { closeVehicleFilm(false); setView('city'); });
+  $('#back-to-city').addEventListener('click', () => {
+    closeVehicleFilm(false);
+    returnFromChild('#hotspot-vehiculos');
+  });
   $('#company-back').addEventListener('click', returnCompanyJourney);
+  $('#company-allies').addEventListener('click', event => {
+    const option = event.target.closest('[data-insurer]');
+    if (!option) return;
+    preferredInsurer = option.dataset.insurer;
+    $('#company-selected').textContent = preferredInsurer ? `Aseguradora de preferencia: ${preferredInsurer}` : 'Sin aseguradora de preferencia';
+    $('#company-allies').hidden = true;
+    $('#company-services').hidden = false;
+    $('#company-services [data-route]').focus();
+  });
+  $('#change-insurer').addEventListener('click', showCompanyAllies);
   $('#zoom-in').addEventListener('click', () => zoomAt(1.2));
   $('#zoom-out').addEventListener('click', () => zoomAt(1/1.2));
   $('#zoom-reset').addEventListener('click', layoutScene);
-  $('#company-zoom-in').addEventListener('click', () => zoomCompanyAt(1.2));
-  $('#company-zoom-out').addEventListener('click', () => zoomCompanyAt(1/1.2));
-  $('#company-zoom-reset').addEventListener('click', layoutCompanyStage);
   document.addEventListener('keydown', event => {
+    if ($('#quote-wizard').open) return;
     if (event.key === 'Escape' && !vehicleFilm.hidden) { closeVehicleFilm(false); return; }
     if (event.key === 'Escape' && !overlay.hidden) { closePanel(); return; }
     if (event.key === 'Escape' && !guide.hidden) { closeGuide(); return; }
     if (event.key === 'Escape' && worldMenu.classList.contains('is-open')) { worldMenu.classList.remove('is-open'); return; }
     if (event.key === 'Escape' && zonePanel.classList.contains('is-open')) { zonePanel.classList.remove('is-open'); return; }
-    if (event.key === 'Escape' && companyState === 'arrived') { returnCompanyJourney(); return; }
+    if (event.key === 'Escape' && !companyView.hidden && companyState === 'arrived') { returnCompanyJourney(); return; }
     if (event.key === 'Escape' && !homeView.hidden) {
       if (!$('#home-review').hidden) { closeHomeReview(); return; }
       if (!$('#home-question').hidden) { closeHomeQuestion(); return; }
       leaveHomeJourney(); return;
     }
-    if (event.key === 'Escape' && !vehiclesView.hidden) { setView('city'); return; }
+    if (event.key === 'Escape' && !vehiclesView.hidden) { returnFromChild('#hotspot-vehiculos'); return; }
     if (document.activeElement === viewport && ['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)) {
       event.preventDefault();
       if(event.key==='ArrowLeft')pan.x+=65;if(event.key==='ArrowRight')pan.x-=65;if(event.key==='ArrowUp')pan.y+=65;if(event.key==='ArrowDown')pan.y-=65;
       clampPan();updateScene();return;
     }
     if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('.hotspot-control,.vehicle-option,.service-hotspot')) {
-      event.preventDefault();event.target.click();return;
+      event.preventDefault();
+      event.target.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      return;
     }
-    const activeDrawer = !overlay.hidden ? panel : (!guide.hidden ? guide.querySelector('.guide-panel') : null);
+    const activeDrawer = !overlay.hidden ? panel : !guide.hidden ? guide.querySelector('.guide-panel')
+      : !$('#home-review').hidden ? $('#home-review-form') : null;
     if (event.key === 'Tab' && activeDrawer) {
       const focusable = $$('button:not([hidden]),input:not([hidden])').filter(el => activeDrawer.contains(el) && el.offsetParent !== null);
       const first=focusable[0],last=focusable[focusable.length-1];
@@ -884,7 +1026,8 @@
       : currentProduct === 'muebles'
         ? ` Los valores declarados son ${$('#home-structure-value').textContent} para infraestructura y ${$('#home-contents-summary').textContent} para muebles y enseres.`
         : '';
-    const message=`Hola, equipo de Sky. Soy ${name}, estoy interesado en adquirir un ${coverage} y me gustaría recibir una cotización.${homeDetail}`;
+    const insurerDetail = preferredInsurer ? ` Mi aseguradora de preferencia es ${preferredInsurer}.` : '';
+    const message=`Hola, equipo de Sky. Soy ${name}, estoy interesado en adquirir un ${coverage} y me gustaría recibir una cotización.${homeDetail}${insurerDetail}`;
     window.location.assign(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
   });
   nameInput.addEventListener('input',()=>nameInput.setCustomValidity(''));
@@ -896,7 +1039,8 @@
   function mediaReady(element,successEvent) {
     return new Promise(resolve => {
       if (element instanceof HTMLMediaElement && element.error) { resolve(false); return; }
-      if ((element instanceof HTMLImageElement && element.complete) || (element instanceof HTMLVideoElement && element.readyState >= 2)) { resolve(true); return; }
+      if (element instanceof HTMLImageElement && element.complete) { resolve(element.naturalWidth > 0); return; }
+      if (element instanceof HTMLVideoElement && element.readyState >= 2) { resolve(true); return; }
       const ok=()=>{cleanup();resolve(true);},bad=()=>{cleanup();resolve(false);};
       const cleanup=()=>{element.removeEventListener(successEvent,ok);element.removeEventListener('error',bad);};
       element.addEventListener(successEvent,ok,{once:true});element.addEventListener('error',bad,{once:true});
@@ -917,7 +1061,7 @@
     hotspots.forEach(item=>item.classList.remove('is-revealed'));
     for(const hotspot of hotspots){
       hotspot.classList.add('is-revealed');
-      await sleep(reducedMotion.matches?20:390);
+      await sleep(reducedMotion.matches?20:260);
     }
     const cue=$('#discovery-cue');
     cue.classList.add('is-visible');
@@ -946,7 +1090,8 @@
   }
   async function loadExperience() {
     retry.hidden=true;progress.style.width='8%';loadingMessage.textContent='Preparando tu experiencia 360°';
-    const cityImage=new Image();cityImage.src='assets/city-master.webp';
+    const cityImage = new Image();
+    cityImage.src = $('#city-svg image').getAttribute('href');
     progress.style.width='52%';
     const videoPromise=mediaReady(introVideo,'loadeddata');
     const imagePromise=mediaReady(cityImage,'load');
@@ -963,6 +1108,5 @@
   retry.addEventListener('click',loadExperience);
 
   layoutScene();
-  layoutVehicles();
   loadExperience();
 })();
